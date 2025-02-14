@@ -1,0 +1,38 @@
+{
+  "$schema": "https://tree-sitter.github.io/tree-sitter/assets/schemas/config.schema.json",
+  "grammars": [
+    {
+      "name": "gmic",
+      "camelcase": "Gmic",
+      "title": "Gmic",
+      "scope": "source.gmic",
+      "file-types": [
+        "gmic"
+      ],
+      "injection-regex": "^gmic$",
+      "class-name": "TreeSitterGmic"
+    }
+  ],
+  "metadata": {
+    "version": "0.1.0",
+    "license": "MIT",
+    "description": "Gmic grammar for tree-sitter",
+    "authors": [
+      {
+        "name": "Anton Älgmyr"
+      }
+    ],
+    "links": {
+      "repository": "https://github.com/tree-sitter/tree-sitter-gmic"
+    }
+  },
+  "bindings": {
+    "c": true,
+    "go": true,
+    "node": true,
+    "python": true,
+    "rust": true,
+    "swift": true,
+    "zig": false
+  }
+}
