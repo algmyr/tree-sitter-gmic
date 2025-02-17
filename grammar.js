@@ -9,6 +9,9 @@
 
 identifier = /[A-Za-z_][A-Za-z_0-9]*/
 
+list_of = (rule, sep) => seq(rule, repeat1(seq(sep, rule)))
+maybe_list_of = (rule, sep) => seq(rule, repeat(seq(sep, rule)))
+
 module.exports = grammar({
   name: "gmic",
 
@@ -28,28 +31,51 @@ module.exports = grammar({
 
     statement: $ => choice(
       $.assignment,
-      $.if_statement,
       $.command_call,
     ),
 
     command_call: $ => seq(
       optional("+"),
-      alias($.identifier, $.command_name),
-      optional($.indexing),
-      repeat($.array_expression),
+      alias(choice($.keyword, $.identifier), $.command_name),
+      optional($.selection),
+      repeat($.expression),
       $.terminator,
     ),
 
-    indexing: $ => seq(token.immediate("["), $.expression, "]"),
+    // Indexing.
+    selection: $ => choice(
+      seq(
+        token.immediate("["),
+        $._selection_list,
+        "]",
+      ),
+      $.negative_index_shorthand,
+    ),
+    index: $ => seq(optional("-"), $.integer),
+    percentage: $ => seq($.integer, "%"),
+    _index_or_percentage: $ => choice($.index, $.percentage),
+    index_range: $ => seq(
+      $._index_or_percentage,
+      "-",
+      $._index_or_percentage,
+      optional(seq(":", $.integer))
+    ),
+    _selection_list: $ => maybe_list_of(
+      seq(
+        optional($.negate_indexing),
+        choice($.index, $.index_range, $.identifier),
+      ),
+      ",",
+    ),
+    negate_indexing: $ => "^",
+    negative_index_shorthand: $ => choice(".", "..", "..."),
 
-    if_statement: $ => seq(
-      "if", alias($.string, $.condition), repeat($.statement),
-      optional(seq("elif", alias($.string, $.condition), repeat($.statement))),
-      optional(seq("else", repeat($.statement))),
-      "fi"
+    expression: $ => choice(
+      $.scalar_expression,
+      $.array_expression,
     ),
 
-    expression: $ => seq(
+    scalar_expression: $ => seq(
       optional(/[\-+]/),
       choice(
         $.integer,
@@ -58,6 +84,13 @@ module.exports = grammar({
         $.string,
         $.bare_string,
       ),
+    ),
+
+    array_expression: $ => seq(
+      list_of(
+        alias($.scalar_expression, $.array_item),
+        ",",
+      )
     ),
 
 
@@ -96,11 +129,7 @@ module.exports = grammar({
 
 
     assignment: $ => seq(
-      $.identifier, "=", $.array_expression,
-    ),
-
-    array_expression: $ => seq(
-      $.expression, repeat(seq(",", $.expression)),
+      $.identifier, "=", $.expression,
     ),
 
     identifier: $ => identifier,
@@ -109,5 +138,43 @@ module.exports = grammar({
 
     // Bare string, should be low priority.
     bare_string: $ => /[/.a-zA-Z_\d][/.a-zA-Z_\d\-]*/,
+
+    keyword: $ => choice(
+      // Control flow
+      "apply_parallel",
+      "apply_parallel_channels",
+      "apply_parallel_overlap",
+      "apply_tiles",
+      "apply_timeout",
+      "check",
+      "check3d",
+      "continue",
+      "break",
+      "do",
+      "done",
+      "elif",
+      "else",
+      "fi",
+      "error",
+      "eval",
+      "exec",
+      "exec_out",
+      "for",
+      "foreach",
+      "if",
+      "local",
+      "noarg",
+      "onfail",
+      "parallel",
+      "progress",
+      "quit",
+      "repeat",
+      "return",
+      "rprogress",
+      "run",
+      "skip",
+      "status",
+      "while",
+    ),
   }
 });

@@ -8,7 +8,38 @@
       "required": true,
       "types": [
         {
-          "type": "expression",
+          "type": "array_item",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "array_item",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "bare_string",
+          "named": true
+        },
+        {
+          "type": "integer",
+          "named": true
+        },
+        {
+          "type": "math_environment",
+          "named": true
+        },
+        {
+          "type": "string",
+          "named": true
+        },
+        {
+          "type": "variable",
           "named": true
         }
       ]
@@ -23,7 +54,7 @@
       "required": true,
       "types": [
         {
-          "type": "array_expression",
+          "type": "expression",
           "named": true
         },
         {
@@ -80,15 +111,15 @@
       "required": true,
       "types": [
         {
-          "type": "array_expression",
-          "named": true
-        },
-        {
           "type": "command_name",
           "named": true
         },
         {
-          "type": "indexing",
+          "type": "expression",
+          "named": true
+        },
+        {
+          "type": "selection",
           "named": true
         },
         {
@@ -117,23 +148,11 @@
       "required": true,
       "types": [
         {
-          "type": "bare_string",
+          "type": "array_expression",
           "named": true
         },
         {
-          "type": "integer",
-          "named": true
-        },
-        {
-          "type": "math_environment",
-          "named": true
-        },
-        {
-          "type": "string",
-          "named": true
-        },
-        {
-          "type": "variable",
+          "type": "scalar_expression",
           "named": true
         }
       ]
@@ -145,26 +164,7 @@
     "fields": {}
   },
   {
-    "type": "if_statement",
-    "named": true,
-    "fields": {},
-    "children": {
-      "multiple": true,
-      "required": true,
-      "types": [
-        {
-          "type": "condition",
-          "named": true
-        },
-        {
-          "type": "statement",
-          "named": true
-        }
-      ]
-    }
-  },
-  {
-    "type": "indexing",
+    "type": "index",
     "named": true,
     "fields": {},
     "children": {
@@ -172,7 +172,30 @@
       "required": true,
       "types": [
         {
-          "type": "expression",
+          "type": "integer",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "index_range",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "index",
+          "named": true
+        },
+        {
+          "type": "integer",
+          "named": true
+        },
+        {
+          "type": "percentage",
           "named": true
         }
       ]
@@ -229,6 +252,88 @@
     }
   },
   {
+    "type": "negative_index_shorthand",
+    "named": true,
+    "fields": {}
+  },
+  {
+    "type": "percentage",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "integer",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "scalar_expression",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "bare_string",
+          "named": true
+        },
+        {
+          "type": "integer",
+          "named": true
+        },
+        {
+          "type": "math_environment",
+          "named": true
+        },
+        {
+          "type": "string",
+          "named": true
+        },
+        {
+          "type": "variable",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "selection",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "identifier",
+          "named": true
+        },
+        {
+          "type": "index",
+          "named": true
+        },
+        {
+          "type": "index_range",
+          "named": true
+        },
+        {
+          "type": "negate_indexing",
+          "named": true
+        },
+        {
+          "type": "negative_index_shorthand",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
     "type": "source_file",
     "named": true,
     "root": true,
@@ -263,10 +368,6 @@
         {
           "type": "command_call",
           "named": true
-        },
-        {
-          "type": "if_statement",
-          "named": true
         }
       ]
     }
@@ -296,11 +397,31 @@
     "named": false
   },
   {
+    "type": "%",
+    "named": false
+  },
+  {
     "type": "+",
     "named": false
   },
   {
     "type": ",",
+    "named": false
+  },
+  {
+    "type": "-",
+    "named": false
+  },
+  {
+    "type": ".",
+    "named": false
+  },
+  {
+    "type": "..",
+    "named": false
+  },
+  {
+    "type": "...",
     "named": false
   },
   {
@@ -320,16 +441,56 @@
     "named": false
   },
   {
+    "type": "apply_parallel",
+    "named": false
+  },
+  {
+    "type": "apply_parallel_channels",
+    "named": false
+  },
+  {
+    "type": "apply_parallel_overlap",
+    "named": false
+  },
+  {
+    "type": "apply_tiles",
+    "named": false
+  },
+  {
+    "type": "apply_timeout",
+    "named": false
+  },
+  {
     "type": "bare_string",
     "named": true
+  },
+  {
+    "type": "break",
+    "named": false
+  },
+  {
+    "type": "check",
+    "named": false
+  },
+  {
+    "type": "check3d",
+    "named": false
   },
   {
     "type": "comment",
     "named": true
   },
   {
-    "type": "condition",
-    "named": true
+    "type": "continue",
+    "named": false
+  },
+  {
+    "type": "do",
+    "named": false
+  },
+  {
+    "type": "done",
+    "named": false
   },
   {
     "type": "elif",
@@ -340,7 +501,31 @@
     "named": false
   },
   {
+    "type": "error",
+    "named": false
+  },
+  {
+    "type": "eval",
+    "named": false
+  },
+  {
+    "type": "exec",
+    "named": false
+  },
+  {
+    "type": "exec_out",
+    "named": false
+  },
+  {
     "type": "fi",
+    "named": false
+  },
+  {
+    "type": "for",
+    "named": false
+  },
+  {
+    "type": "foreach",
     "named": false
   },
   {
@@ -352,12 +537,68 @@
     "named": true
   },
   {
+    "type": "local",
+    "named": false
+  },
+  {
+    "type": "negate_indexing",
+    "named": true
+  },
+  {
+    "type": "noarg",
+    "named": false
+  },
+  {
+    "type": "onfail",
+    "named": false
+  },
+  {
+    "type": "parallel",
+    "named": false
+  },
+  {
+    "type": "progress",
+    "named": false
+  },
+  {
+    "type": "quit",
+    "named": false
+  },
+  {
+    "type": "repeat",
+    "named": false
+  },
+  {
+    "type": "return",
+    "named": false
+  },
+  {
+    "type": "rprogress",
+    "named": false
+  },
+  {
+    "type": "run",
+    "named": false
+  },
+  {
+    "type": "skip",
+    "named": false
+  },
+  {
+    "type": "status",
+    "named": false
+  },
+  {
     "type": "string",
     "named": true
   },
   {
     "type": "terminator",
     "named": true
+  },
+  {
+    "type": "while",
+    "named": false
   },
   {
     "type": "{",
